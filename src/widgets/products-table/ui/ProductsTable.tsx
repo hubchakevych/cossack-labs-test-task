@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Flex,
   Spinner,
   Table,
@@ -13,24 +12,26 @@ type ProductsTableProps = {
   products: Product[]
   loading: boolean
   error: string | null
+  renderRowActions?: (product: Product) => React.ReactNode
 }
 
 export const ProductsTable = ({
   products,
   loading,
   error,
+  renderRowActions,
 }: ProductsTableProps) => {
 
   if (loading) {
     return <Spinner size="3" />
   }
 
-  if(products.length === 0 && !loading) {
-    return <Text color="gray">No products found</Text>
-  }
-
   if (error) {
     return <Text color="red">{error}</Text>
+  }
+
+  if(products.length === 0) {
+    return <Text color="gray">No products found</Text>
   }
 
   return (
@@ -55,10 +56,11 @@ export const ProductsTable = ({
               <Table.Cell>{product.stock}</Table.Cell>
               <Table.Cell>{product.rating}</Table.Cell>
               <Table.Cell>
-                <Flex gap="2" justify="end">
-                  <Button variant="outline">Edit</Button>
-                  <Button variant="outline">Delete</Button>
-                </Flex>
+                {renderRowActions ? (
+                  <Flex gap="2" justify="end">
+                    {renderRowActions(product)}
+                  </Flex>
+                ) : null}
               </Table.Cell>
             </Table.Row>
           ))}

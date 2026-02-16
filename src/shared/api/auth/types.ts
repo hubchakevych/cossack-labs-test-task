@@ -1,5 +1,3 @@
-import { apiClient } from '@/shared/config'
-
 export type AuthUser = {
   id: number
   username: string
@@ -20,7 +18,7 @@ export type LoginParams = {
   password: string
 }
 
-export const authApi = {
-  login: (params: LoginParams) =>
-    apiClient.post<LoginResponse>('/auth/login', params),
+export type RefreshResponse = {
+  accessToken: string
+  refreshToken: string
 }

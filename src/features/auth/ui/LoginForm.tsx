@@ -8,7 +8,7 @@ import { authStore } from '@/app/store'
 import { type LoginFormValues, loginSchema } from '@/features/auth/model'
 import { cn } from '@/shared/lib'
 
-import { defaultValues } from '../constants'
+import { defaultValues } from '../model'
 
 type LoginFormProps = {
   onSuccess: () => void

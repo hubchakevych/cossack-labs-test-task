@@ -1,15 +1,15 @@
 import { Theme } from '@radix-ui/themes'
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import AppRouter from '../routes/AppRouter'
+import { AppRouter } from '../routes'
+import { authStore } from '../store/authStore'
 
 import '@/app/styles/global.css'
 
+authStore.setupAuthRefreshHandler()
+
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Theme>
-      <AppRouter />
-    </Theme>
-  </StrictMode>,
+  <Theme>
+    <AppRouter />
+  </Theme>,
 )

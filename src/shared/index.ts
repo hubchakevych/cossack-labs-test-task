@@ -1,1 +1,1 @@
-export { cn } from './lib'
+export * from './lib'

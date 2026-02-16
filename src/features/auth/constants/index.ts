@@ -1,1 +1,0 @@
-export { defaultValues } from './defaultValues'

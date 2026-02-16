@@ -1,1 +1,5 @@
-export type { Product, ProductsResponse } from './types'
+export type {
+  DeleteProductResponse,
+  Product,
+  ProductsResponse,
+} from './types'

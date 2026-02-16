@@ -11,23 +11,36 @@ export class ProductsStore {
   error: string | null = null
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this, {
+      getProducts: false,
+    })
   }
 
-  getProducts = async (params?: { limit?: number; skip?: number }): Promise<void> => {
+  getProducts = async ({ limit, skip }: { limit: number; skip: number }): Promise<void> => {
+    this.startLoading()
+    try {
+      const { data } = await productApi.getAll({ limit, skip })
+      this.setSuccess(data.products, data.total)
+    } catch (err) {
+      this.setFailure(parseBackendError(err))
+    }
+  }
+
+  private startLoading = (): void => {
     this.loading = true
     this.error = null
+  }
 
-    try {
-      const { data } = await productApi.getAll(params)
-      this.products = data.products
-      this.total = data.total
-    } catch (err) {
-      this.error = parseBackendError(err)
-      this.products = []
-    } finally {
-      this.loading = false
-    }
+  private setSuccess = (products: Product[], total: number): void => {
+    this.products = products
+    this.total = total
+    this.loading = false
+  }
+
+  private setFailure = (message: string): void => {
+    this.error = message
+    this.products = []
+    this.loading = false
   }
 }
 

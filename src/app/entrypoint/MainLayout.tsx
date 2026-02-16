@@ -1,4 +1,4 @@
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { Outlet } from 'react-router-dom'
 
 import { Header } from '@/widgets/header'
@@ -10,12 +10,12 @@ const MainLayout = () => {
       className="h-full overflow-hidden bg-background text-foreground"
     >
       <Header />
-      <Flex direction="column" className="min-h-0 flex-1 overflow-auto p-6">
+      <Box className="min-h-0 flex-1 overflow-hidden p-6">
         <Outlet />
-      </Flex>
+      </Box>
     </Flex>
   )
 }
 
 export { MainLayout }
-export default MainLayout
+

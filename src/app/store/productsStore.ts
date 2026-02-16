@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 
-import { productApi } from '@/entities/product'
 import type { Product } from '@/entities/product'
+import { productApi } from '@/entities/product'
 import { parseBackendError } from '@/shared/lib/parseBackendError'
 
 export class ProductsStore {
@@ -14,7 +14,7 @@ export class ProductsStore {
     makeAutoObservable(this)
   }
 
-  fetchProducts = async (params?: { limit?: number; skip?: number }): Promise<void> => {
+  getProducts = async (params?: { limit?: number; skip?: number }): Promise<void> => {
     this.loading = true
     this.error = null
 

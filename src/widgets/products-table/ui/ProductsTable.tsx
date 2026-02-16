@@ -1,0 +1,69 @@
+import {
+  Box,
+  Button,
+  Flex,
+  Spinner,
+  Table,
+  Text,
+} from '@radix-ui/themes'
+
+import type { Product } from '@/entities/product'
+
+type ProductsTableProps = {
+  products: Product[]
+  loading: boolean
+  error: string | null
+}
+
+export const ProductsTable = ({
+  products,
+  loading,
+  error,
+}: ProductsTableProps) => {
+
+  if (loading) {
+    return <Spinner size="3" />
+  }
+
+  if(products.length === 0 && !loading) {
+    return <Text color="gray">No products found</Text>
+  }
+
+  if (error) {
+    return <Text color="red">{error}</Text>
+  }
+
+  return (
+    <Box className="w-full shrink-0 flex-1 h-0">
+      <Table.Root className="h-full min-h-0 w-full">
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Category</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Price</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Stock</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Rating</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell />
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {products.map((product) => (
+            <Table.Row key={product.id}>
+              <Table.Cell>{product.title}</Table.Cell>
+              <Table.Cell>{product.category}</Table.Cell>
+              <Table.Cell>${product.price.toFixed(2)}</Table.Cell>
+              <Table.Cell>{product.stock}</Table.Cell>
+              <Table.Cell>{product.rating}</Table.Cell>
+              <Table.Cell>
+                <Flex gap="2" justify="end">
+                  <Button variant="outline">Edit</Button>
+                  <Button variant="outline">Delete</Button>
+                </Flex>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Box>
+  )
+}

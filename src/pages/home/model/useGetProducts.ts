@@ -10,36 +10,8 @@ import type {
 } from '@/entities/product/model/types'
 import { SortOrder } from '@/entities/product/model/types'
 
-const SORT_FIELDS: ProductSortBy[] = ['title', 'price', 'stock', 'rating']
-
-const SORT_ORDERS: SortOrder[] = [SortOrder.ASC, SortOrder.DESC]
-const SEARCH_QUERY_PARAM = 'q'
-
-const parseNumberParam = (value: string | null, fallback: number): number => {
-  if (!value) {
-    return fallback
-  }
-  const parsed = Number(value)
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback
-}
-
-const parseSortField = (value: string | null): ProductSortBy | undefined => {
-  if (!value) {
-    return undefined
-  }
-  return SORT_FIELDS.includes(value as ProductSortBy)
-    ? (value as ProductSortBy)
-    : undefined
-}
-
-const parseSortOrder = (value: string | null): SortOrder | undefined => {
-  if (!value) {
-    return undefined
-  }
-  return SORT_ORDERS.includes(value as SortOrder)
-    ? (value as SortOrder)
-    : undefined
-}
+import { HOME_PRODUCTS_QUERY_PARAMS } from './constants'
+import { buildProductsSearchParams, parseProductsQueryParams } from './utils'
 
 type UseGetProductsResult = {
   products: Product[]
@@ -57,38 +29,20 @@ export const useGetProducts = (): UseGetProductsResult => {
   const { products, loading, error, total, getProducts } = productsStore
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const queryParams = useMemo<ProductsTableQueryParams>(() => ({
-    searchTerm: searchParams.get(SEARCH_QUERY_PARAM) || undefined,
-    category: searchParams.get('category') || undefined,
-    sortBy: parseSortField(searchParams.get('sortBy')),
-    order: parseSortOrder(searchParams.get('order')),
-    take: parseNumberParam(searchParams.get('take'), DEFAULT_PRODUCTS_TAKE),
-    skip: parseNumberParam(searchParams.get('skip'), 0),
-  }), [searchParams])
+  const queryParams = useMemo<ProductsTableQueryParams>(
+    () => parseProductsQueryParams(searchParams),
+    [searchParams],
+  )
 
   const setParams = useCallback((next: ProductsTableQueryParams) => {
-    const nextSearchParams = new URLSearchParams()
-
-    if (next.searchTerm) {
-      nextSearchParams.set(SEARCH_QUERY_PARAM, next.searchTerm)
-    }
-    if (next.category) {
-      nextSearchParams.set('category', next.category)
-    }
-    if (next.sortBy) {
-      nextSearchParams.set('sortBy', next.sortBy)
-    }
-    if (next.order) {
-      nextSearchParams.set('order', next.order)
-    }
-    nextSearchParams.set('take', String(next.take))
-    nextSearchParams.set('skip', String(next.skip))
-
-    setSearchParams(nextSearchParams)
+    setSearchParams(buildProductsSearchParams(next))
   }, [setSearchParams])
 
   useEffect(() => {
-    if (!searchParams.has('take') || !searchParams.has('skip')) {
+    if (
+      !searchParams.has(HOME_PRODUCTS_QUERY_PARAMS.take)
+      || !searchParams.has(HOME_PRODUCTS_QUERY_PARAMS.skip)
+    ) {
       setParams(queryParams)
     }
   }, [queryParams, searchParams, setParams])

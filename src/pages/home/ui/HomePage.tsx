@@ -2,6 +2,7 @@ import { Button, Flex, Heading } from '@radix-ui/themes'
 import { observer } from 'mobx-react-lite'
 
 import { DeleteProductDialog } from '@/features/delete-product'
+import { EditProductDialog } from '@/features/edit-product'
 import { ProductsTable } from '@/widgets/products-table'
 
 import { useGetProducts } from '../model'
@@ -20,7 +21,11 @@ const HomePageInner = () => {
         error={error}
         renderRowActions={(product) => (
           <>
-            <Button variant="outline">Edit</Button>
+            <EditProductDialog
+              product={product}
+              onSave={() => undefined}
+              trigger={<Button variant="outline">Edit</Button>}
+            />
             <DeleteProductDialog
               productName={product.title}
               onConfirm={() => undefined}

@@ -1,5 +1,5 @@
 export type {
-  DeleteProductResponse,
   Product,
+  ProductCategory,
   ProductsResponse,
 } from './types'

@@ -1,6 +1,6 @@
 export { productApi } from './api'
 export type {
-  DeleteProductResponse,
   Product,
+  ProductCategory,
   ProductsResponse,
 } from './model'

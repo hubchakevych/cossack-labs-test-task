@@ -2,7 +2,7 @@ import { Dialog, Flex, Spinner } from '@radix-ui/themes'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 
-import { useGetCategories } from '@/app/model/useGetCategories'
+import { useGetCategories } from '@/entities/product'
 import type { ProductFormValues } from '@/shared/lib/product-form'
 import { getEmptyProductFormValues } from '@/shared/lib/product-form'
 import { ProductForm } from '@/shared/ui/ProductForm'

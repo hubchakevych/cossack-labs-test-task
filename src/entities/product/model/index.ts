@@ -4,3 +4,4 @@ export type {
   ProductCategory,
   ProductsResponse,
 } from './types'
+export { useGetCategories } from './useGetCategories'

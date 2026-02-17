@@ -4,4 +4,4 @@ export type {
   ProductCategory,
   ProductsResponse,
 } from './model'
-export { prepareProductFormValues } from './model'
+export { prepareProductFormValues, useGetCategories } from './model'

@@ -12,13 +12,24 @@ import {
   HOME_PRODUCTS_SORT_ORDERS,
 } from './constants'
 
-const parseNumberParam = (value: string | null, fallback: number): number => {
+const parseNumberParam = (
+  value: string | null,
+  fallback: number,
+  options?: { allowZero?: boolean },
+): number => {
   if (!value) {
     return fallback
   }
 
   const parsed = Number(value)
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback
+  if (!Number.isFinite(parsed)) {
+    return fallback
+  }
+
+  const allowZero = options?.allowZero ?? true
+  return allowZero
+    ? parsed >= 0 ? parsed : fallback
+    : parsed > 0 ? parsed : fallback
 }
 
 const parseSortField = (value: string | null): ProductSortBy | undefined => {
@@ -48,7 +59,11 @@ export const parseProductsQueryParams = (
   category: searchParams.get(HOME_PRODUCTS_QUERY_PARAMS.category) || undefined,
   sortBy: parseSortField(searchParams.get(HOME_PRODUCTS_QUERY_PARAMS.sortBy)),
   order: parseSortOrder(searchParams.get(HOME_PRODUCTS_QUERY_PARAMS.order)),
-  take: parseNumberParam(searchParams.get(HOME_PRODUCTS_QUERY_PARAMS.take), DEFAULT_PRODUCTS_TAKE),
+  take: parseNumberParam(
+    searchParams.get(HOME_PRODUCTS_QUERY_PARAMS.take),
+    DEFAULT_PRODUCTS_TAKE,
+    { allowZero: false },
+  ),
   skip: parseNumberParam(searchParams.get(HOME_PRODUCTS_QUERY_PARAMS.skip), DEFAULT_PRODUCTS_SKIP),
 })
 

@@ -13,6 +13,8 @@ import type {
 } from '@/entities/product/model/types'
 import { SortableHeaderCell } from '@/shared/ui'
 
+import { PRODUCTS_TABLE_COLUMN_WIDTH } from './constants'
+
 type ProductsTableProps = {
   products: Product[]
   loading: boolean
@@ -53,18 +55,18 @@ export const ProductsTable = ({
             <SortableHeaderCell
               label="Title"
               field="title"
-              className="w-[320px]"
+              className={PRODUCTS_TABLE_COLUMN_WIDTH.title}
               activeSortField={sortBy}
               sortOrder={order}
               onSortChange={onSortChange}
             />
-            <Table.ColumnHeaderCell className="w-[220px]">
+            <Table.ColumnHeaderCell className={PRODUCTS_TABLE_COLUMN_WIDTH.category}>
               Category
             </Table.ColumnHeaderCell>
             <SortableHeaderCell
               label="Price"
               field="price"
-              className="w-[120px]"
+              className={PRODUCTS_TABLE_COLUMN_WIDTH.numeric}
               activeSortField={sortBy}
               sortOrder={order}
               onSortChange={onSortChange}
@@ -72,7 +74,7 @@ export const ProductsTable = ({
             <SortableHeaderCell
               label="Stock"
               field="stock"
-              className="w-[120px]"
+              className={PRODUCTS_TABLE_COLUMN_WIDTH.numeric}
               activeSortField={sortBy}
               sortOrder={order}
               onSortChange={onSortChange}
@@ -80,33 +82,33 @@ export const ProductsTable = ({
             <SortableHeaderCell
               label="Rating"
               field="rating"
-              className="w-[120px]"
+              className={PRODUCTS_TABLE_COLUMN_WIDTH.numeric}
               activeSortField={sortBy}
               sortOrder={order}
               onSortChange={onSortChange}
             />
-            <Table.ColumnHeaderCell className="w-[180px]" />
+            <Table.ColumnHeaderCell className={PRODUCTS_TABLE_COLUMN_WIDTH.actions} />
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {products.map((product) => (
             <Table.Row key={product.id} className="group">
-              <Table.Cell className="w-[320px] truncate">
+              <Table.Cell className={`${PRODUCTS_TABLE_COLUMN_WIDTH.title} truncate`}>
                 {product.title}
               </Table.Cell>
-              <Table.Cell className="w-[220px] truncate">
+              <Table.Cell className={`${PRODUCTS_TABLE_COLUMN_WIDTH.category} truncate`}>
                 {product.category}
               </Table.Cell>
-              <Table.Cell className="w-[120px]">
+              <Table.Cell className={PRODUCTS_TABLE_COLUMN_WIDTH.numeric}>
                 ${product.price.toFixed(2)}
               </Table.Cell>
-              <Table.Cell className="w-[120px]">
+              <Table.Cell className={PRODUCTS_TABLE_COLUMN_WIDTH.numeric}>
                 {product.stock}
               </Table.Cell>
-              <Table.Cell className="w-[120px]">
+              <Table.Cell className={PRODUCTS_TABLE_COLUMN_WIDTH.numeric}>
                 {product.rating}
               </Table.Cell>
-              <Table.Cell className="w-[180px]">
+              <Table.Cell className={PRODUCTS_TABLE_COLUMN_WIDTH.actions}>
                 {renderRowActions ? (
                   <Flex
                     gap="2"

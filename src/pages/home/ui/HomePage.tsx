@@ -1,5 +1,4 @@
 import {
-  ChevronDownIcon,
   Pencil2Icon,
   PlusIcon,
   TrashIcon,
@@ -11,7 +10,7 @@ import { useGetCategories } from '@/entities/product'
 import { AddProductDialog } from '@/features/add-product'
 import { DeleteProductDialog } from '@/features/delete-product'
 import { EditProductDialog } from '@/features/edit-product'
-import { ProductsCategoryFilter, ProductsSearch } from '@/features/products-filters'
+import { ProductsListFilters, ProductsLoadMoreButton } from '@/features/products-list-controls'
 import { ProductsTable } from '@/widgets/products-table'
 
 import { useGetProducts } from '../model'
@@ -46,21 +45,11 @@ const HomePageInner = () => {
         />
       </Flex>
 
-      <Flex gap="3" mb="4" wrap="wrap">
-        <ProductsSearch
-          value={params.searchTerm || ''}
-          onChange={(searchTerm) => {
-            updateFilters({ searchTerm: searchTerm || undefined })
-          }}
-        />
-        <ProductsCategoryFilter
-          value={params.category || ''}
-          categories={categories}
-          onChange={(category) => {
-            updateFilters({ category: category || undefined })
-          }}
-        />
-      </Flex>
+      <ProductsListFilters
+        params={params}
+        categories={categories}
+        onChange={updateFilters}
+      />
 
       <ProductsTable
         products={products}
@@ -95,12 +84,7 @@ const HomePageInner = () => {
         )}
       />
       {hasMore ? (
-        <Flex justify="center" mt="4">
-          <Button variant="outline" onClick={loadMore} disabled={loading}>
-            {!loading && <ChevronDownIcon width={14} height={14} />}
-            {loading ? 'Loading...' : 'Show more'}
-          </Button>
-        </Flex>
+        <ProductsLoadMoreButton loading={loading} onLoadMore={loadMore} />
       ) : null}
     </Flex>
   )

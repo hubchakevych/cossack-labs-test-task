@@ -1,5 +1,4 @@
 export { prepareProductFormValues } from './prepareProductFormValues'
-export { ProductsStore, productsStore } from './productsStore'
 export type {
   Product,
   ProductCategory,

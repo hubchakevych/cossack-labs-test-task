@@ -77,7 +77,7 @@ export const EditProductForm = ({
               size="2"
             >
               <Select.Trigger
-                placeholder={categoriesLoading ? 'Loading…' : 'Select category'}
+                placeholder="Select category"
                 className="w-full"
               />
               <Select.Content

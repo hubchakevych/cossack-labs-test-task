@@ -3,59 +3,47 @@ import { Button, Flex, Select, TextField } from '@radix-ui/themes'
 import type { Resolver } from 'react-hook-form'
 import { Controller, useForm } from 'react-hook-form'
 
-import type { Product, ProductCategory } from '@/entities/product'
-import { FormField } from '@/shared/ui'
+import type { ProductCategory } from '@/entities/product'
+import { getErrorMessage } from '@/shared/lib/getErrorMessage'
+import type { ProductFormValues } from '@/shared/lib/product-form'
+import { productFormSchema } from '@/shared/lib/product-form'
+import { FormField } from '@/shared/ui/FormField'
 
-import type { EditProductFormValues } from '../model'
-import { editProductSchema } from '../model'
-import { prepareDefaultValues } from '../model/defaultValues'
-
-function getError(err: unknown): string | undefined {
-  if (err === undefined || err === null) {
-    return undefined
-  }
-  if (typeof err === 'string') {
-    return err
-  }
-  if (typeof err === 'object' && err !== null && 'message' in err) {
-    return (err as { message?: string }).message
-  }
-  return undefined
-}
-
-type EditProductFormProps = {
-  product: Product
+type ProductFormProps = {
+  defaultValues: ProductFormValues
   categories: ProductCategory[]
   categoriesLoading: boolean
-  onSave: (productId: number, values: EditProductFormValues) => void | Promise<void>
+  onSubmit: (values: ProductFormValues) => void | Promise<void>
   onCancel: () => void
+  submitLabel: string
 }
 
-export const EditProductForm = ({
-  product,
+export const ProductForm = ({
+  defaultValues,
   categories,
   categoriesLoading,
-  onSave,
+  onSubmit,
   onCancel,
-}: EditProductFormProps) => {
-  const form = useForm<EditProductFormValues>({
-    resolver: zodResolver(editProductSchema) as Resolver<EditProductFormValues>,
-    defaultValues: prepareDefaultValues(product),
+  submitLabel,
+}: ProductFormProps) => {
+  const form = useForm<ProductFormValues>({
+    resolver: zodResolver(productFormSchema) as Resolver<ProductFormValues>,
+    defaultValues,
     mode: 'onTouched',
   })
 
   const { control, handleSubmit, formState: { errors, isDirty } } = form
 
-  const onSubmit = (data: EditProductFormValues) => {
-    void Promise.resolve(onSave(product.id, data))
+  const handleFormSubmit = (data: ProductFormValues) => {
+    void Promise.resolve(onSubmit(data))
   }
 
   return (
     <form
-      onSubmit={(e) => void handleSubmit(onSubmit)(e)}
+      onSubmit={(e) => void handleSubmit(handleFormSubmit)(e)}
       className="mt-4 space-y-4"
     >
-      <FormField label="Title" error={getError(errors.title)}>
+      <FormField label="Title" error={getErrorMessage(errors.title)}>
         <Controller
           name="title"
           control={control}
@@ -65,7 +53,7 @@ export const EditProductForm = ({
         />
       </FormField>
 
-      <FormField label="Category" error={getError(errors.category)}>
+      <FormField label="Category" error={getErrorMessage(errors.category)}>
         <Controller
           name="category"
           control={control}
@@ -95,7 +83,7 @@ export const EditProductForm = ({
         />
       </FormField>
 
-      <FormField label="Price" error={getError(errors.price)}>
+      <FormField label="Price" error={getErrorMessage(errors.price)}>
         <Controller
           name="price"
           control={control}
@@ -110,7 +98,7 @@ export const EditProductForm = ({
         />
       </FormField>
 
-      <FormField label="Stock" error={getError(errors.stock)}>
+      <FormField label="Stock" error={getErrorMessage(errors.stock)}>
         <Controller
           name="stock"
           control={control}
@@ -129,7 +117,7 @@ export const EditProductForm = ({
           Cancel
         </Button>
         <Button type="submit" disabled={!isDirty}>
-          Save
+          {submitLabel}
         </Button>
       </Flex>
     </form>

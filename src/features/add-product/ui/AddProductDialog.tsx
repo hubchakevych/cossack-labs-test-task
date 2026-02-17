@@ -3,29 +3,23 @@ import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 
 import { useGetCategories } from '@/app/model/useGetCategories'
-import type { Product } from '@/entities/product'
-import { prepareProductFormValues } from '@/entities/product'
 import type { ProductFormValues } from '@/shared/lib/product-form'
+import { getEmptyProductFormValues } from '@/shared/lib/product-form'
 import { ProductForm } from '@/shared/ui/ProductForm'
 
-type EditProductDialogProps = {
-  product: Product
-  onSave: (productId: number, values: ProductFormValues) => void | Promise<void>
+type AddProductDialogProps = {
+  onSave: (values: ProductFormValues) => void | Promise<void>
   trigger: React.ReactNode
 }
 
-const EditProductDialogInner = ({
-  product,
-  onSave,
-  trigger,
-}: EditProductDialogProps) => {
+const AddProductDialogInner = ({ onSave, trigger }: AddProductDialogProps) => {
   const [open, setOpen] = useState(false)
   const { categories, categoriesLoading } = useGetCategories(open)
 
   const showLoader = categoriesLoading || (open && categories.length === 0)
 
   const handleSubmit = (values: ProductFormValues) => {
-    void Promise.resolve(onSave(product.id, values))
+    void Promise.resolve(onSave(values))
     setOpen(false)
   }
 
@@ -33,9 +27,9 @@ const EditProductDialogInner = ({
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>{trigger}</Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
-        <Dialog.Title>Edit product</Dialog.Title>
+        <Dialog.Title>Add product</Dialog.Title>
         <Dialog.Description size="2">
-          Update the product details below.
+          Fill in the details to add a new product.
         </Dialog.Description>
         {showLoader ? (
           <Flex justify="center" align="center" py="8">
@@ -43,12 +37,12 @@ const EditProductDialogInner = ({
           </Flex>
         ) : (
           <ProductForm
-            defaultValues={prepareProductFormValues(product)}
+            defaultValues={getEmptyProductFormValues()}
             categories={categories}
             categoriesLoading={categoriesLoading}
             onSubmit={handleSubmit}
             onCancel={() => setOpen(false)}
-            submitLabel="Save"
+            submitLabel="Create"
           />
         )}
       </Dialog.Content>
@@ -56,4 +50,4 @@ const EditProductDialogInner = ({
   )
 }
 
-export const EditProductDialog = observer(EditProductDialogInner)
+export const AddProductDialog = observer(AddProductDialogInner)

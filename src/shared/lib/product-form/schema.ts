@@ -8,7 +8,7 @@ const requiredNumber = (msg: string) =>
     })
     .transform(Number)
 
-export const editProductSchema = z.object({
+export const productFormSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   category: z.string().min(1, 'Category is required'),
   price: requiredNumber('Price is required').pipe(
@@ -19,4 +19,4 @@ export const editProductSchema = z.object({
   ),
 })
 
-export type EditProductFormValues = z.infer<typeof editProductSchema>
+export type ProductFormValues = z.infer<typeof productFormSchema>

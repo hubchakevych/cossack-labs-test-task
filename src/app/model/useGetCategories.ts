@@ -6,7 +6,7 @@ export const useGetCategories = (shouldFetch: boolean) => {
   const { categories, categoriesLoading, getCategories } = productsStore
 
   useEffect(() => {
-    if(shouldFetch) {
+    if (shouldFetch) {
       void getCategories()
     }
   }, [shouldFetch, getCategories])

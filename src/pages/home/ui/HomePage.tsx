@@ -1,6 +1,7 @@
 import { Button, Flex, Heading } from '@radix-ui/themes'
 import { observer } from 'mobx-react-lite'
 
+import { AddProductDialog } from '@/features/add-product'
 import { DeleteProductDialog } from '@/features/delete-product'
 import { EditProductDialog } from '@/features/edit-product'
 import { ProductsTable } from '@/widgets/products-table'
@@ -12,9 +13,16 @@ const HomePageInner = () => {
 
   return (
     <Flex direction="column" className="h-full min-h-0 overflow-hidden">
-      <Heading size="5" mb="4">
-        Products
-      </Heading>
+      <Flex justify="between" align="center" mb="4" gap="4">
+        <Heading size="5">Products</Heading>
+        <AddProductDialog
+          onSave={(_values) => {
+            void _values
+            // TODO: call productsStore.addProduct when API is connected
+          }}
+          trigger={<Button>Add product</Button>}
+        />
+      </Flex>
       <ProductsTable
         products={products}
         loading={loading}

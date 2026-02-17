@@ -49,7 +49,7 @@ export const ProductsTable = ({
         </Table.Header>
         <Table.Body>
           {products.map((product) => (
-            <Table.Row key={product.id}>
+            <Table.Row key={product.id} className="group">
               <Table.Cell>{product.title}</Table.Cell>
               <Table.Cell>{product.category}</Table.Cell>
               <Table.Cell>${product.price.toFixed(2)}</Table.Cell>
@@ -57,7 +57,11 @@ export const ProductsTable = ({
               <Table.Cell>{product.rating}</Table.Cell>
               <Table.Cell>
                 {renderRowActions ? (
-                  <Flex gap="2" justify="end">
+                  <Flex
+                    gap="2"
+                    justify="end"
+                    className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+                  >
                     {renderRowActions(product)}
                   </Flex>
                 ) : null}

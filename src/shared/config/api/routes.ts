@@ -6,5 +6,7 @@ export const ApiRoutes = {
     Refresh: '/auth/refresh',
   },
   Products: '/products',
+  ProductsSearch: '/products/search',
+  ProductsByCategory: '/products/category',
   ProductsCategories: '/products/categories',
 } as const

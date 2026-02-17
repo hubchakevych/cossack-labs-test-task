@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { EnterIcon } from '@radix-ui/react-icons'
 import * as Label from '@radix-ui/react-label'
 import { Box, Button, TextField } from '@radix-ui/themes'
 import { observer } from 'mobx-react-lite'
@@ -98,6 +99,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         loading={authStore.loading}
         className="w-full"
       >
+        <EnterIcon width={14} height={14} />
         Sign in
       </Button>
     </form>

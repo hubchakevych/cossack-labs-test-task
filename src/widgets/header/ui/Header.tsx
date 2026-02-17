@@ -1,3 +1,4 @@
+import { ExitIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Link as RadixLink, Spinner } from '@radix-ui/themes'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'react-router-dom'
@@ -30,6 +31,7 @@ const HeaderInner = () => {
             </Box>
           )}
           <Button type="button" variant="outline" onClick={handleLogout}>
+            <ExitIcon width={14} height={14} />
             Log out
           </Button>
         </Flex>

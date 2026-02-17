@@ -6,12 +6,20 @@ import {
   Text,
 } from '@radix-ui/themes'
 
-import type { Product } from '@/entities/product'
+import type {
+  Product,
+  ProductSortBy,
+  SortOrder,
+} from '@/entities/product/model/types'
+import { SortableHeaderCell } from '@/shared/ui'
 
 type ProductsTableProps = {
   products: Product[]
   loading: boolean
   error: string | null
+  sortBy?: ProductSortBy
+  order?: SortOrder
+  onSortChange?: (field: ProductSortBy) => void
   renderRowActions?: (product: Product) => React.ReactNode
 }
 
@@ -19,10 +27,13 @@ export const ProductsTable = ({
   products,
   loading,
   error,
+  sortBy,
+  order,
+  onSortChange,
   renderRowActions,
 }: ProductsTableProps) => {
 
-  if (loading) {
+  if (loading && products.length === 0) {
     return <Spinner size="3" />
   }
 
@@ -36,26 +47,66 @@ export const ProductsTable = ({
 
   return (
     <Box className="w-full shrink-0 flex-1 h-0">
-      <Table.Root className="h-full min-h-0 w-full">
+      <Table.Root className="h-full min-h-0 w-full table-fixed">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Category</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Price</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Stock</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Rating</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell />
+            <SortableHeaderCell
+              label="Title"
+              field="title"
+              className="w-[320px]"
+              activeSortField={sortBy}
+              sortOrder={order}
+              onSortChange={onSortChange}
+            />
+            <Table.ColumnHeaderCell className="w-[220px]">
+              Category
+            </Table.ColumnHeaderCell>
+            <SortableHeaderCell
+              label="Price"
+              field="price"
+              className="w-[120px]"
+              activeSortField={sortBy}
+              sortOrder={order}
+              onSortChange={onSortChange}
+            />
+            <SortableHeaderCell
+              label="Stock"
+              field="stock"
+              className="w-[120px]"
+              activeSortField={sortBy}
+              sortOrder={order}
+              onSortChange={onSortChange}
+            />
+            <SortableHeaderCell
+              label="Rating"
+              field="rating"
+              className="w-[120px]"
+              activeSortField={sortBy}
+              sortOrder={order}
+              onSortChange={onSortChange}
+            />
+            <Table.ColumnHeaderCell className="w-[180px]" />
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {products.map((product) => (
             <Table.Row key={product.id} className="group">
-              <Table.Cell>{product.title}</Table.Cell>
-              <Table.Cell>{product.category}</Table.Cell>
-              <Table.Cell>${product.price.toFixed(2)}</Table.Cell>
-              <Table.Cell>{product.stock}</Table.Cell>
-              <Table.Cell>{product.rating}</Table.Cell>
-              <Table.Cell>
+              <Table.Cell className="w-[320px] truncate">
+                {product.title}
+              </Table.Cell>
+              <Table.Cell className="w-[220px] truncate">
+                {product.category}
+              </Table.Cell>
+              <Table.Cell className="w-[120px]">
+                ${product.price.toFixed(2)}
+              </Table.Cell>
+              <Table.Cell className="w-[120px]">
+                {product.stock}
+              </Table.Cell>
+              <Table.Cell className="w-[120px]">
+                {product.rating}
+              </Table.Cell>
+              <Table.Cell className="w-[180px]">
                 {renderRowActions ? (
                   <Flex
                     gap="2"

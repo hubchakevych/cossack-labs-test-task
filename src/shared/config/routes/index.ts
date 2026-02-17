@@ -1,4 +1,4 @@
 export enum PagesPaths {
-  Home = '/',
+  Home = '/dashboard',
   Auth = '/auth',
 }

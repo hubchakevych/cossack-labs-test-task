@@ -24,3 +24,19 @@ export type ProductCategory = {
   url: string
 }
 
+export type ProductSortBy = 'title' | 'price' | 'stock' | 'rating'
+
+export enum SortOrder {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export type ProductsTableQueryParams = {
+  searchTerm?: string
+  category?: string
+  sortBy?: ProductSortBy
+  order?: SortOrder
+  take: number
+  skip: number
+}
+

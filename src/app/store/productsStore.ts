@@ -1,7 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import type { Product, ProductCategory } from '@/entities/product'
-import { productApi } from '@/entities/product'
+import { productApi } from '@/entities/product/api/products'
+import type {
+  Product,
+  ProductCategory,
+  ProductsTableQueryParams,
+} from '@/entities/product/model/types'
 import { parseBackendError } from '@/shared/lib/parseBackendError'
 
 export class ProductsStore {
@@ -20,11 +24,37 @@ export class ProductsStore {
     })
   }
 
-  getProducts = async ({ limit, skip }: { limit: number; skip: number }): Promise<void> => {
+  getProducts = async ({
+    searchTerm,
+    category,
+    sortBy,
+    order,
+    take,
+    skip,
+  }: ProductsTableQueryParams): Promise<void> => {
     this.startLoading()
     try {
-      const { data } = await productApi.getAll({ limit, skip })
-      this.setSuccess(data.products, data.total)
+      const params = { limit: take, skip, sortBy, order }
+      if (category) {
+        const response = await productApi.getByCategory({ ...params, category })
+        const products = searchTerm
+          ? response.data.products.filter((product) =>
+            product.title.toLowerCase().includes(searchTerm.toLowerCase()),
+          )
+          : response.data.products
+
+        this.setSuccess(products, response.data.total)
+        return
+      }
+
+      if (searchTerm) {
+        const response = await productApi.search({ ...params, searchTerm })
+        this.setSuccess(response.data.products, response.data.total)
+        return
+      }
+
+      const response = await productApi.getAll(params)
+      this.setSuccess(response.data.products, response.data.total)
     } catch (err) {
       this.setFailure(parseBackendError(err))
     }

@@ -1,10 +1,32 @@
 import { apiClient, ApiRoutes } from '@/shared/config'
 
-import type { ProductCategory, ProductsResponse } from '../model/types'
+import type {
+  ProductCategory,
+  ProductSortBy,
+  ProductsResponse,
+  SortOrder,
+} from '../model/types'
+
+type ProductsListParams = {
+  limit: number
+  skip: number
+  sortBy?: ProductSortBy
+  order?: SortOrder
+}
 
 export const productApi = {
-  getAll: ({ limit, skip }: { limit: number; skip: number }) =>
-    apiClient.get<ProductsResponse>(ApiRoutes.Products, { params: { limit, skip } }),
+  getAll: (params: ProductsListParams) =>
+    apiClient.get<ProductsResponse>(ApiRoutes.Products, { params }),
+
+  search: ({ searchTerm, ...params }: ProductsListParams & { searchTerm: string }) =>
+    apiClient.get<ProductsResponse>(ApiRoutes.ProductsSearch, {
+      params: { q: searchTerm, ...params },
+    }),
+
+  getByCategory: ({ category, ...params }: ProductsListParams & { category: string }) =>
+    apiClient.get<ProductsResponse>(`${ApiRoutes.ProductsByCategory}/${category}`, {
+      params,
+    }),
 
   getCategories: () =>
     apiClient.get<ProductCategory[]>(ApiRoutes.ProductsCategories),

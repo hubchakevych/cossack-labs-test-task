@@ -1,3 +1,4 @@
+import { Cross2Icon, TrashIcon } from '@radix-ui/react-icons'
 import {
   AlertDialog,
   Button,
@@ -31,11 +32,13 @@ export const DeleteProductDialog = ({
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>
             <Button variant="soft" color="gray">
+              <Cross2Icon width={14} height={14} />
               Cancel
             </Button>
           </AlertDialog.Cancel>
           <AlertDialog.Action>
             <Button color="red" variant="solid" onClick={handleConfirm}>
+              <TrashIcon width={14} height={14} />
               Delete
             </Button>
           </AlertDialog.Action>

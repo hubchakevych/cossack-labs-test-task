@@ -20,6 +20,7 @@ export const ProductsSearch = ({ value, onChange }: ProductsSearchProps) => {
     if (debouncedSearchInputValue === value) {
       return
     }
+
     onChange(debouncedSearchInputValue)
   }, [debouncedSearchInputValue, onChange, value])
 

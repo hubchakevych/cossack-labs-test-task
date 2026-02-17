@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { productsStore } from '@/app/store/productsStore'
-import { DEFAULT_PRODUCTS_TAKE } from '@/entities/product/model/constants'
+import { productsStore } from '@/entities/product/model/productsStore'
 import type {
   Product,
   ProductSortBy,
@@ -10,7 +9,10 @@ import type {
 } from '@/entities/product/model/types'
 import { SortOrder } from '@/entities/product/model/types'
 
-import { HOME_PRODUCTS_QUERY_PARAMS } from './constants'
+import {
+  DEFAULT_PRODUCTS_SKIP,
+  HOME_PRODUCTS_QUERY_PARAMS,
+} from './constants'
 import { buildProductsSearchParams, parseProductsQueryParams } from './utils'
 
 type UseGetProductsResult = {
@@ -51,16 +53,16 @@ export const useGetProducts = (): UseGetProductsResult => {
     setParams({
       ...queryParams,
       ...patch,
-      skip: 0,
+      skip: DEFAULT_PRODUCTS_SKIP,
     })
   }, [queryParams, setParams])
 
   const loadMore = useCallback(() => {
     setParams({
       ...queryParams,
-      take: queryParams.take + DEFAULT_PRODUCTS_TAKE,
+      skip: products.length,
     })
-  }, [queryParams, setParams])
+  }, [products.length, queryParams, setParams])
 
   const updateSort = useCallback((field: ProductSortBy) => {
     const isSameField = queryParams.sortBy === field
@@ -87,6 +89,6 @@ export const useGetProducts = (): UseGetProductsResult => {
     updateFilters,
     updateSort,
     loadMore,
-    hasMore: queryParams.skip + products.length < total,
+    hasMore: products.length < total,
   }
 }

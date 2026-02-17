@@ -22,4 +22,5 @@ export const HOME_PRODUCTS_SORT_ORDERS: SortOrder[] = [
   SortOrder.DESC,
 ]
 
+export const DEFAULT_PRODUCTS_TAKE = 20
 export const DEFAULT_PRODUCTS_SKIP = 0

@@ -1,5 +1,5 @@
-export { DEFAULT_PRODUCTS_TAKE, PRODUCTS_SORT_FIELDS } from './constants'
 export { prepareProductFormValues } from './prepareProductFormValues'
+export { ProductsStore, productsStore } from './productsStore'
 export type {
   Product,
   ProductCategory,

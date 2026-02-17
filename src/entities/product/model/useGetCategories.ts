@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { productsStore } from '@/app/store/productsStore'
+import { productsStore } from './productsStore'
 
 export const useGetCategories = (shouldFetch: boolean) => {
   const { categories, categoriesLoading, getCategories } = productsStore

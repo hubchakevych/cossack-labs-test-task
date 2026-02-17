@@ -7,5 +7,4 @@ export type {
   ProductsTableQueryParams,
 } from './model'
 export { SortOrder } from './model'
-export { DEFAULT_PRODUCTS_TAKE, PRODUCTS_SORT_FIELDS } from './model'
-export { prepareProductFormValues, useGetCategories } from './model'
+export { prepareProductFormValues, ProductsStore, productsStore, useGetCategories } from './model'

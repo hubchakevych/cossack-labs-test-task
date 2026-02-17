@@ -1,4 +1,3 @@
-import { DEFAULT_PRODUCTS_TAKE } from '@/entities/product/model/constants'
 import type {
   ProductSortBy,
   ProductsTableQueryParams,
@@ -7,6 +6,7 @@ import type {
 
 import {
   DEFAULT_PRODUCTS_SKIP,
+  DEFAULT_PRODUCTS_TAKE,
   HOME_PRODUCTS_QUERY_PARAMS,
   HOME_PRODUCTS_SORT_FIELDS,
   HOME_PRODUCTS_SORT_ORDERS,

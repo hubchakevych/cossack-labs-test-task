@@ -1,5 +1,5 @@
 import type { InternalAxiosRequestConfig } from 'axios'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { authApi } from '@/shared/api/auth/auth'
 import {
@@ -21,11 +21,7 @@ export class AuthStore {
   )
 
   constructor() {
-    makeAutoObservable(this, {
-      login: false,
-      refresh: false,
-      setupAuthRefreshHandler: false,
-    })
+    makeAutoObservable(this)
   }
 
   get isAuthenticated(): boolean {
@@ -88,11 +84,7 @@ export class AuthStore {
     this.pendingRefresh = this.refresh()
       .then(() => true)
       .catch(() => false)
-      .finally(() => {
-        runInAction(() => {
-          this.pendingRefresh = null
-        })
-      })
+      .finally(this.clearPendingRefresh)
     return this.pendingRefresh
   }
 
@@ -109,6 +101,10 @@ export class AuthStore {
 
   private setLoginError = (message: string): void => {
     this.error = message
+  }
+
+  private clearPendingRefresh = (): void => {
+    this.pendingRefresh = null
   }
 
   private clearTokens = (): void => {

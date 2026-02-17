@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { parseBackendError } from '@/shared/lib'
 
@@ -19,10 +19,7 @@ export class ProductsStore {
   categoriesLoading = false
 
   constructor() {
-    makeAutoObservable(this, {
-      getProducts: false,
-      getCategories: false,
-    })
+    makeAutoObservable(this)
   }
 
   getProducts = async ({
@@ -80,15 +77,9 @@ export class ProductsStore {
     this.categoriesLoading = true
     try {
       const { data } = await productApi.getCategories()
-      runInAction(() => {
-        this.categories = data
-        this.categoriesLoading = false
-      })
+      this.setCategoriesSuccess(data)
     } catch {
-      runInAction(() => {
-        this.categories = []
-        this.categoriesLoading = false
-      })
+      this.setCategoriesFailure()
     }
   }
 
@@ -109,6 +100,16 @@ export class ProductsStore {
     this.error = message
     this.products = []
     this.loading = false
+  }
+
+  private setCategoriesSuccess = (categories: ProductCategory[]): void => {
+    this.categories = categories
+    this.categoriesLoading = false
+  }
+
+  private setCategoriesFailure = (): void => {
+    this.categories = []
+    this.categoriesLoading = false
   }
 }
 

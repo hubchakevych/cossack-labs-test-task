@@ -10,9 +10,7 @@ export class CurrentUserStore {
   error: string | null = null
 
   constructor() {
-    makeAutoObservable(this, {
-      getCurrentUser: false,
-    })
+    makeAutoObservable(this)
   }
 
   getCurrentUser = async (): Promise<void> => {

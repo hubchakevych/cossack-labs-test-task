@@ -1,13 +1,27 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as Label from '@radix-ui/react-label'
-import { Box, Button, Flex, Select, TextField } from '@radix-ui/themes'
+import { Button, Flex, Select, TextField } from '@radix-ui/themes'
+import type { Resolver } from 'react-hook-form'
 import { Controller, useForm } from 'react-hook-form'
 
 import type { Product, ProductCategory } from '@/entities/product'
+import { FormField } from '@/shared/ui'
 
 import type { EditProductFormValues } from '../model'
 import { editProductSchema } from '../model'
 import { prepareDefaultValues } from '../model/defaultValues'
+
+function getError(err: unknown): string | undefined {
+  if (err === undefined || err === null) {
+    return undefined
+  }
+  if (typeof err === 'string') {
+    return err
+  }
+  if (typeof err === 'object' && err !== null && 'message' in err) {
+    return (err as { message?: string }).message
+  }
+  return undefined
+}
 
 type EditProductFormProps = {
   product: Product
@@ -25,8 +39,9 @@ export const EditProductForm = ({
   onCancel,
 }: EditProductFormProps) => {
   const form = useForm<EditProductFormValues>({
-    resolver: zodResolver(editProductSchema),
+    resolver: zodResolver(editProductSchema) as Resolver<EditProductFormValues>,
     defaultValues: prepareDefaultValues(product),
+    mode: 'onTouched',
   })
 
   const { control, handleSubmit, formState: { errors, isDirty } } = form
@@ -40,10 +55,7 @@ export const EditProductForm = ({
       onSubmit={(e) => void handleSubmit(onSubmit)(e)}
       className="mt-4 space-y-4"
     >
-      <Box>
-        <Label.Root className="block text-sm font-medium mb-1.5">
-          Title
-        </Label.Root>
+      <FormField label="Title" error={getError(errors.title)}>
         <Controller
           name="title"
           control={control}
@@ -51,14 +63,9 @@ export const EditProductForm = ({
             <TextField.Root placeholder="Product title" size="2" {...field} />
           )}
         />
-        {errors.title && (
-          <span className="text-red-500 text-sm">{errors.title.message}</span>
-        )}
-      </Box>
-      <Box>
-        <Label.Root className="block text-sm font-medium mb-1.5">
-          Category
-        </Label.Root>
+      </FormField>
+
+      <FormField label="Category" error={getError(errors.category)}>
         <Controller
           name="category"
           control={control}
@@ -86,16 +93,9 @@ export const EditProductForm = ({
             </Select.Root>
           )}
         />
-        {errors.category && (
-          <span className="text-red-500 text-sm">
-            {errors.category.message}
-          </span>
-        )}
-      </Box>
-      <Box>
-        <Label.Root className="block text-sm font-medium mb-1.5">
-          Price
-        </Label.Root>
+      </FormField>
+
+      <FormField label="Price" error={getError(errors.price)}>
         <Controller
           name="price"
           control={control}
@@ -105,18 +105,12 @@ export const EditProductForm = ({
               placeholder="0"
               size="2"
               {...field}
-              onChange={(e) => field.onChange(e.target.valueAsNumber ?? 0)}
             />
           )}
         />
-        {errors.price && (
-          <span className="text-red-500 text-sm">{errors.price.message}</span>
-        )}
-      </Box>
-      <Box>
-        <Label.Root className="block text-sm font-medium mb-1.5">
-          Stock
-        </Label.Root>
+      </FormField>
+
+      <FormField label="Stock" error={getError(errors.stock)}>
         <Controller
           name="stock"
           control={control}
@@ -126,14 +120,10 @@ export const EditProductForm = ({
               placeholder="0"
               size="2"
               {...field}
-              onChange={(e) => field.onChange(e.target.valueAsNumber ?? 0)}
             />
           )}
         />
-        {errors.stock && (
-          <span className="text-red-500 text-sm">{errors.stock.message}</span>
-        )}
-      </Box>
+      </FormField>
       <Flex gap="3" justify="end" mt="4">
         <Button type="button" variant="soft" color="gray" onClick={onCancel}>
           Cancel

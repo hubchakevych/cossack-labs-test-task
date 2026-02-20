@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import { LoginPage } from '@/pages/auth/ui'
 import { HomePage } from '@/pages/home/ui'
@@ -17,6 +17,7 @@ const AppRouter = () => {
             <Route path={PagesPaths.Home} element={<HomePage />} />
           </Route>
         </Route>
+        <Route path={PagesPaths.NotFound} element={<Navigate to={PagesPaths.Home} replace />} />
       </Routes>
     </BrowserRouter>
   )
